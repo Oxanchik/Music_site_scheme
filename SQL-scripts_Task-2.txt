@@ -1,0 +1,49 @@
+--Таблица музыкальных жанров
+CREATE TABLE IF NOT EXISTS styles (
+    style_id SERIAL PRIMARY KEY,
+    style VARCHAR(100) NOT NULL
+);
+
+-- Таблица исполнителей
+CREATE TABLE IF NOT EXISTS artists (
+    artist_id SERIAL PRIMARY KEY,
+    artist VARCHAR(100) NOT NULL
+);
+
+-- Таблица альбомов
+CREATE TABLE IF NOT EXISTS albums (
+    album_id SERIAL PRIMARY KEY,
+    album_name VARCHAR(200) NOT NULL,
+    album_year INTEGER
+);
+
+-- Таблица треков
+CREATE TABLE IF NOT EXISTS tracks (
+    track_id SERIAL PRIMARY KEY,
+    album_id INTEGER NOT NULL REFERENCES albums(album_id),
+    track_name VARCHAR(200) NOT NULL,
+    duration INTERVAL NOT NULL
+);
+
+-- Связь много‑ко‑многим между жанрами и исполнителями
+CREATE TABLE IF NOT EXISTS styles_artists (
+    style_id INTEGER NOT NULL REFERENCES styles(style_id),
+    artist_id INTEGER NOT NULL REFERENCES artists(artist_id),
+    CONSTRAINT styl_art PRIMARY KEY (style_id, artist_id)
+);
+
+-- Связь много‑ко‑многим между исполнителями и альбомами
+CREATE TABLE IF NOT EXISTS artists_albums (
+    artist_id INTEGER NOT NULL REFERENCES artists(artist_id),
+    album_id INTEGER NOT NULL REFERENCES albums(album_id),
+    CONSTRAINT arts_alb PRIMARY KEY (artist_id, album_id)
+);
+
+-- Таблица сборников
+CREATE TABLE IF NOT EXISTS collections (
+    collection_id SERIAL PRIMARY KEY,
+    album_id INT NOT NULL REFERENCES albums(album_id),
+    track_id INT NOT NULL REFERENCES tracks(track_id),
+    collection_name VARCHAR(200) NOT NULL,
+    collection_year INTEGER
+);
