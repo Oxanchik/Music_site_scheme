@@ -4,6 +4,14 @@ SELECT track_name, duration
  ORDER BY duration DESC
  LIMIT 1;
 
+-- Название и продолжительность самого длительного трека, если таких треков может быть несколько
+SELECT track_name, duration
+  FROM tracks
+ WHERE duration = (
+    SELECT MAX(duration)
+      FROM tracks
+    );
+
 -- Название треков, продолжительность которых не менее 3,5 минут
 SELECT track_name
   FROM tracks
